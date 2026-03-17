@@ -1,0 +1,26 @@
+﻿:root {
+  font-family: "Segoe UI", Arial, sans-serif;
+}
+
+html,
+body,
+#app {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  min-height: 100%;
+}
+
+body {
+  background: #f4f7fb;
+  color: #1f2937;
+}
+
+.auth-bg {
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at 10% 10%, rgba(72, 145, 255, 0.18) 0, transparent 35%),
+    radial-gradient(circle at 80% 90%, rgba(77, 182, 172, 0.2) 0, transparent 32%),
+    linear-gradient(120deg, #f4f7fb 0%, #e9f0fb 100%);
+}
+
