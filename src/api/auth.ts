@@ -1,4 +1,4 @@
-﻿import http from '@/api/http'
+import http from '@/api/http'
 
 export interface RegisterPayload {
   username: string
@@ -40,4 +40,14 @@ export function infoApi() {
 
 export function logoutApi() {
   return http.post('/app/auth/logout')
+}
+
+export function uploadAvatarApi(file: File) {
+  const formData = new FormData()
+  formData.append('file', file)
+  return http.post<{ avatar: string }>('/app/auth/avatar', formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data'
+    }
+  })
 }

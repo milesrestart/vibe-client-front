@@ -1,5 +1,5 @@
-﻿import { defineStore } from 'pinia'
-import { infoApi, loginApi, logoutApi, registerApi, type RegisterPayload, type UserInfo } from '@/api/auth'
+import { defineStore } from 'pinia'
+import { infoApi, loginApi, logoutApi, registerApi, uploadAvatarApi, type RegisterPayload, type UserInfo } from '@/api/auth'
 import { getToken, removeToken, setToken } from '@/utils/token'
 
 interface AuthState {
@@ -33,6 +33,13 @@ export const useAuthStore = defineStore('auth', {
       } finally {
         this.logoutLocal()
       }
+    },
+    async uploadAvatar(file: File) {
+      const res = await uploadAvatarApi(file)
+      if (this.userInfo) {
+        this.userInfo.avatar = res.avatar
+      }
+      return res.avatar
     },
     logoutLocal() {
       this.token = ''

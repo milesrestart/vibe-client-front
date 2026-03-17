@@ -8,16 +8,17 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/home',
     component: () => import('@/layouts/AppLayout.vue'),
-    children: [
-      { path: '', name: 'Home', component: () => import('@/views/home/Index.vue') }
-    ]
+    children: [{ path: '', name: 'Home', component: () => import('@/views/home/Index.vue') }]
+  },
+  {
+    path: '/player',
+    component: () => import('@/layouts/AppLayout.vue'),
+    children: [{ path: '', name: 'Player', component: () => import('@/views/player/Index.vue') }]
   },
   {
     path: '/profile',
     component: () => import('@/layouts/AppLayout.vue'),
-    children: [
-      { path: '', name: 'Profile', component: () => import('@/views/profile/Index.vue') }
-    ]
+    children: [{ path: '', name: 'Profile', component: () => import('@/views/profile/Index.vue') }]
   },
   { path: '/:pathMatch(.*)*', name: 'NotFound', component: () => import('@/views/error/NotFound.vue'), meta: { public: true } }
 ]
