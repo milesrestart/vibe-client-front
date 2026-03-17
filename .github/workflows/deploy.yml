@@ -1,0 +1,73 @@
+﻿name: vibe-client-front-cicd
+
+on:
+  push:
+    branches:
+      - feature_fat
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+
+      - name: Upload dist artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: front-dist
+          path: dist/
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+
+      - name: Upload dist to server
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.FRONT_SSH_HOST }}
+          username: ${{ secrets.FRONT_SSH_USER }}
+          key: ${{ secrets.FRONT_SSH_KEY }}
+          port: ${{ secrets.FRONT_SSH_PORT }}
+          source: "dist/*"
+          target: ${{ secrets.FRONT_DEPLOY_PATH }}
+          overwrite: true
+
+      - name: Reload nginx
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.FRONT_SSH_HOST }}
+          username: ${{ secrets.FRONT_SSH_USER }}
+          key: ${{ secrets.FRONT_SSH_KEY }}
+          port: ${{ secrets.FRONT_SSH_PORT }}
+          script: |
+            sudo nginx -t
+            sudo systemctl reload nginx
